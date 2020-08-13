@@ -40,7 +40,7 @@ if [ ! -d "${GIT_SYNC_DIR}/.git" ]; then
         git -C "${GIT_SYNC_DIR}" fetch
         git -C "${GIT_SYNC_DIR}" reset "${GIT_SYNC_NOTEMPTY_OPTS}" "origin/${GIT_SYNC_BRANCH}"
         git -C "${GIT_SYNC_DIR}" branch -u "origin/${GIT_SYNC_BRANCH}"
-
+        git -C "${GIT_SYNC_DIR}" checkout .
     fi
 fi
 
