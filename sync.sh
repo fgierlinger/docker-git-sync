@@ -39,7 +39,7 @@ if [ ! -d "${GIT_SYNC_DIR}/.git" ]; then
         git -C "${GIT_SYNC_DIR}" remote add origin "${GIT_SYNC_REPO}"
         git -C "${GIT_SYNC_DIR}" fetch
         git -C "${GIT_SYNC_DIR}" reset "${GIT_SYNC_NOTEMPTY_OPTS}" "origin/${GIT_SYNC_BRANCH}"
-        git -C "${GIT_SYNC_DIR}" branch -u "origin/${GIT_SYNC_BRANCH}" "${GIT_SYNC_BRANCH}"
+        git -C "${GIT_SYNC_DIR}" branch -u "origin/${GIT_SYNC_BRANCH}"
 
     fi
 fi
