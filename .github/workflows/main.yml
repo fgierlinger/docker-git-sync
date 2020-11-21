@@ -47,6 +47,6 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/386
-          from-cache: type=registry,ref=fgierlinger/git-sync
+          cache-from: type=registry,ref=fgierlinger/git-sync
           tags: fgierlinger/git-sync:latest
           builder: ${{ steps.buildx.outputs.name }}
