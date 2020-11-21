@@ -27,7 +27,7 @@ jobs:
           platforms: linux/amd64,linux/386,linux/armhf
           file : ./Dockerfile.x86
           tags: fgierlinger/git-sync:latest
-          builder: buildx
+          builder: ${{ steps.buildx.outputs.name }}
   push:
     needs: test
     runs-on: ubuntu-latest
@@ -47,4 +47,4 @@ jobs:
           push: true
           platforms: linux/amd64,linux/386,linux/armhf
           tags: fgierlinger/git-sync:latest
-          builder: buildx
+          builder: ${{ steps.buildx.outputs.name }}
