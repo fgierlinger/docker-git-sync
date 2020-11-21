@@ -44,4 +44,4 @@ jobs:
           # Path to the Dockerfile
           file: ./Dockerfile.x86
           # List of target platforms for build
-          platforms: x86
+          platforms: linux/amd64
