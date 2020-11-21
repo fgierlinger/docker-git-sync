@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the action will run. 
@@ -15,17 +13,21 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    if: github.event_name == 'pull_request'
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
+      - uses: docker/build-push-action@v2
+        with:
+          platforms: [ linux/amd64, linux/i386, linux/armhf ]
+          file : ./Dockerfile.x86
+  push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
       - name: Login to docker hub
         uses: docker/login-action@v1
         with:
@@ -44,4 +46,6 @@ jobs:
           # Path to the Dockerfile
           file: ./Dockerfile.x86
           # List of target platforms for build
-          platforms: linux/amd64
+          platforms: [ linux/amd64, linux/i386, linux/armhf ]
+          tags: fgierlinger/git-sync:latest
+          builder: buildx
