@@ -28,7 +28,7 @@ jobs:
           file : ./Dockerfile.x86
           tags: fgierlinger/git-sync:latest
           builder: ${{ steps.buildx.outputs.name }}
-          cache-to: type=registry,ref=fgierlinger/git-sync
+          cache-to: type=local,path=/tmp/cache
   push:
     needs: test
     runs-on: ubuntu-latest
@@ -47,6 +47,6 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/386
-          cache-from: type=registry,ref=fgierlinger/git-sync
+          cache-from: type=local,path=/tmp/cache
           tags: fgierlinger/git-sync:latest
           builder: ${{ steps.buildx.outputs.name }}
