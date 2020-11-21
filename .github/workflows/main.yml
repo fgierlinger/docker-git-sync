@@ -24,7 +24,7 @@ jobs:
       - name: build docker image
         uses: docker/build-push-action@v2
         with:
-          platforms: linux/amd64, linux/386, linux/armhf
+          platforms: linux/amd64,linux/386,linux/armhf
           file : ./Dockerfile.x86
           tags: fgierlinger/git-sync:latest
           builder: buildx
@@ -45,6 +45,6 @@ jobs:
         uses: docker/build-push-action@v2.2.0
         with:
           push: true
-          platforms: linux/amd64, linux/386, linux/armhf
+          platforms: linux/amd64,linux/386,linux/armhf
           tags: fgierlinger/git-sync:latest
           builder: buildx
