@@ -29,7 +29,6 @@ jobs:
           tags: fgierlinger/git-sync:latest
           builder: ${{ steps.buildx.outputs.name }}
   build_and_push:
-    needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
