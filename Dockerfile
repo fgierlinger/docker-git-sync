@@ -1,7 +1,7 @@
-FROM arm32v7/alpine:latest
+FROM alpine
 
 RUN apk --no-cache add bash git
 
 COPY sync.sh /sync.sh
 
-CMD ["bash", "/sync.sh"]
+ENTRYPOINT ["bash", "/sync.sh"]
