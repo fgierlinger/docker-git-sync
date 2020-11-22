@@ -13,7 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  build_amd64:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
@@ -27,13 +27,20 @@ jobs:
           platforms: linux/amd64,linux/386
           file : ./Dockerfile.x86
           builder: ${{ steps.buildx.outputs.name }}
+  build_armhf:
+    runs-on: armhf/ubuntu
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        id: buildx
       - name: build docker image armhf
         uses: docker/build-push-action@v2
         with:
           platforms: linux/armhf
           file : ./Dockerfile.armhf
           builder: ${{ steps.buildx.outputs.name }}
-  build_and_push:
+  build_and_push_amd64:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
@@ -54,6 +61,19 @@ jobs:
           tags: fgierlinger/git-sync:latest-amd64
           builder: ${{ steps.buildx.outputs.name }}
           push: true
+  build_and_push_amrhf:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
       - name: build docker image armhf
         uses: docker/build-push-action@v2
         with:
