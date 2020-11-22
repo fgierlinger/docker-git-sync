@@ -26,14 +26,19 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - 
         name: Build Dockerfile
+        if: github.event_name == 'pull_request'
         uses: docker/build-push-action@v2
         with:
-          load: true
+          push: false
           platforms: linux/amd64,linux/arm/v7
           tags: fgierlinger/git-sync:latest
-          file: ./Dockerfile.armhf
-      -
-        name: Push Dockerfile
-        #if: github.event_name == 'push'
-        run: |
-          docker push fgierlinger/git-sync:latest
+          file: ./Dockerfile
+      - 
+        name: Build Dockerfile and push
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm/v7
+          tags: fgierlinger/git-sync:latest
+          file: ./Dockerfile
