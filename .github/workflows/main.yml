@@ -37,7 +37,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: build docker image armhf
         run: |
-          docker buildx --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
+          docker buildx build --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
           --file ./Dockerfile.armhf --output type=image,push=true .
   build_and_push_amd64:
     runs-on: ubuntu-latest
@@ -75,5 +75,5 @@ jobs:
         uses: docker/setup-buildx-action@v1
       - name: build docker image armhf
         run: |
-          docker buildx --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
+          docker buildx build --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
           --file ./Dockerfile.armhf --output type=image,push=true .
