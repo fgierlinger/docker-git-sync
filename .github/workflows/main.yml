@@ -1,79 +1,39 @@
 name: CI
-
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+on: 
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches: [master]
 jobs:
-  build_amd64:
+  build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Docker Buildx
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      - 
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - 
+        name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
-      - name: build docker image amd64 and 386
-        uses: docker/build-push-action@v2
-        with:
-          platforms: linux/amd64,linux/386
-          file : ./Dockerfile.x86
-          builder: ${{ steps.buildx.outputs.name }}
-  build_armhf:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: build docker image armhf
-        run: |
-          docker buildx build --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
-          --file ./Dockerfile.armhf --output type=image,push=true .
-  build_and_push_amd64:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Login to docker hub
+      -
+        name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: build docker image
+      - 
+        name: Build Dockerfile
         uses: docker/build-push-action@v2
         with:
-          platforms: linux/amd64
-          file : ./Dockerfile.x86
-          tags: fgierlinger/git-sync:latest-amd64
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-  build_and_push_armhf:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Login to docker hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: build docker image armhf
+          load: true
+          platforms: linux/amd64,linux/arm/v7
+          tags: fgierlinger/git-sync:latest
+          file: ./Dockerfile.armhf
+      -
+        name: Push Dockerfile
+        #if: github.event_name == 'push'
         run: |
-          docker buildx build --platform linux/armhf --tag fgierlinger/git-sync:latest-armhf \
-          --file ./Dockerfile.armhf --output type=image,push=true .
+          docker push fgierlinger/git-sync:latest
