@@ -25,4 +25,4 @@ jobs:
           #push: true
           platforms: linux/amd64,linux/arm/v7
           tags: fgierlinger/git-sync:latest
-          file: ./Dockerfile
+          file: ./Dockerfile.armhf
